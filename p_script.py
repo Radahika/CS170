@@ -1,6 +1,6 @@
 i = 0
 j = 0
-N = 5
+N = 50
 W = 20
 matrix = [[0 for x in range(N)] for x in range(N)]
 import random
