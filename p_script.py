@@ -1,6 +1,6 @@
 i = 0
 j = 0
-N = 50
+N = 10
 W = 20
 matrix = [[0 for x in range(N)] for x in range(N)]
 import random
@@ -23,8 +23,9 @@ for i in range(N):
 
 edges =  matrix[N-1]
 for i in range(1, N-1):
-    edges[i] += W
-    matrix[i][N-1] += W
-
+    rand_num = random.randrange(70, 100)
+    edges[i] = rand_num
+    matrix[i][N-1] = rand_num
 
 pretty_print(matrix)
+
