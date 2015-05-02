@@ -58,7 +58,7 @@ if __name__ == '__main__':
 #   input = open()
 
 # def permute(s, paths_list):
-#   min_path = float('inf')
+#   min_path = sys.maxint
 #   for i in paths_list:
 #     out_file = open("out", "w")
 #     out_file.write(i)
