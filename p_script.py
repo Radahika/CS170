@@ -22,5 +22,4 @@ for i in range(N):
         else:
             matrix[i][j] = matrix[j][i]
 
-
 pretty_print(matrix)
