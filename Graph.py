@@ -34,7 +34,7 @@ class Graph(object):
 
 
     def cost_edge(self, endpoint1, endpoint2):
-        return self.adj_matrix[endpoint1-1][endpoint2-1]
+        return self.matrix_graph[endpoint1-1][endpoint2-1]
 
 
     def cost_path(self, p):
