@@ -2,7 +2,7 @@ from Graph import Graph
 import sys
 
 def path_finder(g):
-    """return NPTSP path with lowest path"""
+    """return NPTSP path with lowest cost"""
     return
 
 def legitimate_path(g, p):
