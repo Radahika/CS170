@@ -1,4 +1,5 @@
 import pdb
+import os
 from scorer_single import *
 import os
 
@@ -42,6 +43,9 @@ class Graph(object):
     def cost_path(self, assign):
         #make sure the path is a file with the path listed to use processCase
         return processCase_list(self.pathname, assign)
+
+    def valid_path(self, path):
+        return processCase_valid(self.pathname, path)
 
     def quantity_nodes(self):
         return self.quantity_nodes
