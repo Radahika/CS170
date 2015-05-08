@@ -1,16 +1,16 @@
-class Graph_kyle(object):
+class Graph(object):
 
     def __init__(self, matrix_graph, order_colors = None):
         self.matrix_graph = matrix_graph
         self.quantity_nodes = len(matrix_graph)
         self.color_of_nodes = {}
-        self.colors = order_colors
-
+        
         for x in range(self.quantity_nodes):
             if 'R' == order_colors[x]:
                 self.color_of_nodes[x + 1] = 'red'
             else:
                 self.color_of_nodes[x + 1] = 'blue'
+
 
     def assign_colors(self, index_node, c):
         self.color_of_nodes[index_node] = c
