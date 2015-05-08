@@ -1,6 +1,7 @@
 from Graph_kyle import Graph_kyle as Graph
 import sys
 from itertools import *
+from greedy import *
 
 PERMUTE_CAP = 10
 GRAPHS_COUNT = 495
@@ -63,7 +64,6 @@ def cheapest_neighbor(neighbors):
     for node in neighbors:
         if min_cost == neighbors[node]:
             return node
-
 
 def output():
     solutions = []
