@@ -1,26 +1,15 @@
-import pdb
-import os
-from scorer_single import *
-import os
-
 class Graph(object):
 
-    def __init__(self, matrix_graph, filename, pathname, order_colors = None):
+    def __init__(self, matrix_graph, order_colors = None):
         self.matrix_graph = matrix_graph
         self.quantity_nodes = len(matrix_graph)
         self.color_of_nodes = {}
-        self.filename = filename
-        self.pathname = pathname
-
-        if order_colors:
-            for x in range(len(order_colors)):
-                if order_colors[x] == 'B':
-                    self.color_of_nodes[x+1] = 'blue'
-                else:
-                    self.color_of_nodes[x+1] = 'red'
-        else:
-            for node in range(1, self.quantity_nodes+1):
-                self.color_of_nodes[node] = None
+        
+        for x in range(self.quantity_nodes):
+            if 'R' == order_colors[x]:
+                self.color_of_nodes[x + 1] = 'red'
+            else:
+                self.color_of_nodes[x + 1] = 'blue'
 
 
     def assign_colors(self, index_node, c):
@@ -29,27 +18,34 @@ class Graph(object):
 
     def find_neighbors(self, node):
         neighbors = {}
-        for x in range(1, self.quantity_nodes+1):
-            if x != node:
+        for x in range(1, self.quantity_nodes + 1):
+            if node != x:
                 neighbors[x] = self.cost_edge(node, x)
         return neighbors
 
-    def color_of_vertex(self, index_node):
+
+    def color_node(self, index_node):
         return self.color_of_nodes[index_node]
 
+
     def cost_edge(self, endpoint1, endpoint2):
-        return self.matrix_graph[endpoint1-1][endpoint2-1]
+        edge_cost = self.matrix_graph[endpoint1 - 1][endpoint2 - 1]
+        return edge_cost
 
-    def cost_path(self, assign):
-        #make sure the path is a file with the path listed to use processCase
-        return processCase_list(self.pathname, assign)
 
-    def quantity_nodes(self):
+    def cost_path(self, p):
+        path_cost = 0
+        for node in range(1, len(p)):
+            path_cost += self.cost_edge(p[node - 1], p[node])
+        return path_cost
+
+
+    def amount_nodes(self):
         return self.quantity_nodes
 
-    def __repr__(self):
-        with open(self.pathname, 'r') as fin:
-            return fin.read()
 
-    def __eq__(self, other):
-        return self.color_of_nodes == other.color_of_nodes and self.matrix_graph == other.matrix_graph
+    def oppo_color(self, c):
+        if 'red' == c:
+            return 'blue'
+        else:
+            return 'red'

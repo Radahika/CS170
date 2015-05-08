@@ -1,85 +1,145 @@
-from Graph import *
+from Graph import Graph
 import sys
-import pdb
-from validator import *
+from itertools import *
 
-fout = open("answer.out", "w")
-
-
-import os
-import pdb
-from solver import *
-
+PERMUTE_CAP = 10
+GRAPHS_COUNT = 3
 
 def path_finder(g):
     """return NPTSP path with lowest cost"""
-    T = 495 # number of test cases
-    fout = open("answer.out", "w")
-    for t in xrange(1, T+1):
-        filename = str(t) + ".in"
-        path = os.path.join('instances', filename)
-        g = generate_graph(filename, path)
+    if g.amount_nodes() <= PERMUTE_CAP:
+        return brute_force(g)
+    else:
+        return greedy_algorithm(g)
 
-        if g.filename == '260.in':
-            fout.write("%s\n" % RackCity1)
-        elif g.filename == '60.in':
-            fout.write("%s\n" % RackCity2)
-        elif g.filename == '241.in':
-            fout.write("%s\n" % RackCity3)
-        elif g.quantity_nodes <= 10:
-            #return brute_force(g)
-            continue
-        else:
-            #return greedy
-            continue
 
-def hard_code(g):
-    if g == r1:
-        return "1"
-    elif g == r2:
-        return "2"
-    elif g == r3:
-        return "3"
-
-def legitimate_path(g):
+def legitimate_path(g, p):
     """checks validity of path"""
-    return processFile(g.s)
+    present_color = None
+    same_color_count = 0
+    for i in range(len(p)):
+        node_color = g.color_node(p[i])
+        if node_color == present_color:
+            same_color_count += 1
+        else:
+            present_color = node_color
+            same_color_count = 1
+        if 3 < same_color_count:
+            return False
+    return True
+
 
 def brute_force(g):
     """go through all permutations of possible paths if graph is small enough"""
-    return
+    nodes = []
+    for n in range(1, g.amount_nodes() + 1):
+        nodes.append(n)
+    optimal_path = None
+    optimal_cost = sys.float_info.max
+    for p in permutations(nodes):
+        if legitimate_path(g, p):
+            path_cost = g.cost_path(p)
+            if optimal_cost > path_cost:
+                optimal_path = p
+                optimal_cost = path_cost
+    optimal_path = list(optimal_path)
+    return optimal_path
 
-def output(input_quantity):
+
+def greedy_algorithm(g):
+    optimal_path = None
+    optimal_cost = sys.float_info.max
+    for s_node in range(1, g.amount_nodes() + 1):
+        p, path_cost = greedy_helper(g, s_node)
+        if path_cost < optimal_cost:
+            optimal_cost = path_cost
+            optimal_path = p
+    print "length", len(optimal_path)
+    print "path", optimal_path
+    return optimal_path  
+
+
+def greedy_helper(g, s_node):
+    p = [s_node]
+    current_node = s_node
+    current_color = g.color_node(s_node) 
+    count = 1
+    while len(p) < g.amount_nodes():
+        neighbors = g.find_neighbors(current_node)
+        for node in neighbors.keys():
+            # print "node",node
+            # print "path", p
+            if node in p:
+                # print "hello"
+                del neighbors[node]
+                continue
+            if g.color_node(node) == current_color:
+                if count == 3:
+                    del neighbors[node]
+        # print neighbors
+        if cheapest_neighbor(neighbors) != None:
+            next = cheapest_neighbor(neighbors)
+        # print "next:", next
+        if next != None:
+            if g.color_node(next) == current_color:
+                count += 1
+            else:
+                current_color = g.oppo_color(g.color_node(next))
+                count = 1
+        if next not in p:
+            p.append(next)
+            current_node = next
+            current_color = g.color_node(current_node)
+        # print "current node",current_node
+    return (p, g.cost_path(p)) #return a path and its cost
+
+
+
+    # neighbors = g.find_neighbors(p[-1])
+
+
+
+
+def cheapest_neighbor(neighbors):
+    """takes in a dictionary where keys = nodes and their values = costs"""
+    # min_cost = min(neighbors.values())
+    # # print min_cost
+
+    # for node in neighbors:
+    #     if min_cost == neighbors[node]:
+    #         return node
+    min_cost = sys.float_info.max
+    next = None
+    for node in neighbors:
+        if neighbors[node] < min_cost:
+            min_cost = neighbors[node]
+            next = node
+    return next
+
+
+def output():
     solutions = []
-    for x in range(1, input_quantity + 1):
-        solutions.append(read_input(x))
-    with open('answer.txt', 'w') as answer:
-        for p in solutions:
-            answer.write('%s\n'%' '.join(map(str, p)))
+    for x in range(GRAPHS_COUNT):
+        index_file = 'instances/{0}.in'.format(x + 1)
+        solutions.append(read_input(index_file))
+    with open('answer.out', 'w') as output:
+        for s in solutions:
+            output.write(' '.join(map(str, s)) + '\n')
+
 
 def read_input(index_file):
-    g = generate_graph(index_file)
+    with open(index_file) as data:
+        nodes = int(data.readline())
+        matrix_graph = []
+        for i in range(nodes):
+            matrix_graph.append([])
+        for i in range(nodes):
+            for x in data.readline().split():
+                matrix_graph[i].append(int(x))
+        order_colors = data.readline()
+    g = Graph(matrix_graph, order_colors)
     return path_finder(g)
 
-def generate_graph(index_file, index_path):
-    filename = '{0}'.format(index_file)
-    pathname = '{0}'.format(index_path)
-    with open(pathname) as data:
-        nodes = int(data.readline())
-        matrix_graph = [[] for i in range(nodes)]
-        for i in range(nodes):
-            matrix_graph[i] = [int(k) for k in data.readline().split()]
-        order_colors = data.readline()
-    g = Graph(matrix_graph, filename, pathname, order_colors)
-    return g
 
-
-r1 = generate_graph('RackCity1.in', 'input_files/RackCity1.in')
-r2 = generate_graph('RackCity2.in', 'input_files/RackCity2.in')
-r3 = generate_graph('RackCity3.in', 'input_files/RackCity3.in')
-
-RackCity1 = '50 1  2  3  4  5  6  7  8  9  10  11  12  13  14  15  16  17  18  19  20 21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38 39  40  41  42  43  44  45  46  47  48  49'
-RackCity2 = '5  36  2  12  47  49  28  8  30  19  27  3  14  20  17  13  25  35  26  42  24  37  9  48  46  38  50  10  45  4  16  15  32  1  23  40  6  33  31  41  18  34  39  44  11  7  43  22  29  21'
-RackCity3 = '50  1  13  15  48  12  40  3  2  29  14  43  17  34  33  24  27  38  44  42  39  16  46  10  47  28  26  21  45  30  37  18  5  35  7  22  20  41  8  25  9  49  11  19  31  32  36  6  4  23'
-
-path_finder(r1)
+if __name__ == '__main__':
+    output()
