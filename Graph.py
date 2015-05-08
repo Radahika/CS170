@@ -1,5 +1,6 @@
 import pdb
 from scorer_single import *
+import os
 
 class Graph(object):
 
@@ -38,10 +39,9 @@ class Graph(object):
     def cost_edge(self, endpoint1, endpoint2):
         return self.matrix_graph[endpoint1-1][endpoint2-1]
 
-    def cost_path(self, path):
+    def cost_path(self, assign):
         #make sure the path is a file with the path listed to use processCase
-        assert(os.path.isfile(path))
-        return processCase(self.filename, path)
+        return processCase_list(self.pathname, assign)
 
     def quantity_nodes(self):
         return self.quantity_nodes

@@ -12,26 +12,26 @@ from solver import *
 
 
 def path_finder(g):
-    #"""return NPTSP path with lowest cost"""
-    #T = 495 # number of test cases
-    #for t in xrange(1, T+1):
-        #filename = str(t) + ".in"
-        #print filename
-        #path = os.path.join('instances', filename)
-        #g = generate_graph(filename, path)
+    """return NPTSP path with lowest cost"""
+    T = 495 # number of test cases
+    fout = open("answer.out", "w")
+    for t in xrange(1, T+1):
+        filename = str(t) + ".in"
+        path = os.path.join('instances', filename)
+        g = generate_graph(filename, path)
 
-        #if g.filename == '260.in':
-            #fout.write("%s\n" % " ".join(map(RackCity1, assign))
-        #elif g.filename == '60.in':
-            #return RackCity2
-        #elif g.filename == '241.in':
-            #return RackCity3
-        #elif g.quantity_nodes <= 10:
+        if g.filename == '260.in':
+            fout.write("%s\n" % RackCity1)
+        elif g.filename == '60.in':
+            fout.write("%s\n" % RackCity2)
+        elif g.filename == '241.in':
+            fout.write("%s\n" % RackCity3)
+        elif g.quantity_nodes <= 10:
             #return brute_force(g)
-        #else:
-            ##return greedy
-            #continue
-    pass
+            continue
+        else:
+            #return greedy
+            continue
 
 def hard_code(g):
     if g == r1:
