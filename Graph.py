@@ -44,6 +44,9 @@ class Graph(object):
         #make sure the path is a file with the path listed to use processCase
         return processCase_list(self.pathname, assign)
 
+    def valid_path(self, path):
+        return processCase_valid(self.pathname, path)
+
     def quantity_nodes(self):
         return self.quantity_nodes
 

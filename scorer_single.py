@@ -84,12 +84,42 @@ def processCase_list(s, perm):
 
     cost += d[cur][next]
 
-  return "You got " + `cost` + " points for this case."
+  return cost
 
+
+
+
+def processCase_valid(s, perm):
+  finstance = open(s, "r")
+  N = int(finstance.readline())
+  d = [[] for i in range(N)]
+  for i in xrange(N):
+      d[i] = [int(x) for x in finstance.readline().split()]
+  c = finstance.readline()
+
+  # check it's valid
+  v = [0] * N
+  prev = 'X'
+  count = 0
+  for i in xrange(N):
+    if v[perm[i]-1] == 1:
+      return "Your answer must be a permutation of {1,...,N}."
+    v[perm[i]-1] = 1
+
+    cur = c[perm[i]-1]
+    if cur == prev:
+      count += 1
+    else:
+      prev = cur
+      count = 1
+
+    if count > 3:
+      return "Your tour cannot visit more than 3 same colored cities consecutively."
+
+  return True 
 
 if __name__ == '__main__':
     main(sys.argv[1:])
-
 
 
 # def write_permutations(nodes):
