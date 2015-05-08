@@ -3,7 +3,6 @@ import sys
 import random
 import re
 import collections
-from Graph_kyle import Graph_kyle as Graph
 #most
 
 
@@ -22,16 +21,14 @@ def convert(file_name, node_index):
 
 
 #current issue: if more than one node with same cost, only chooses first one
-def cheapest(g, node, repeat, visited):
-	# for_index = convert(file_name, node)
-	for_index = g.matrix_graph[node-1]
+def cheapest(file_name, node, repeat, visited):
+	for_index = convert(file_name, node)
 	possibilities = []
 
 	# print for_index
 	# print node
 
-	colors = g.colors
-	# colors = linecache.getline(file_name, len(for_index)+2)
+	colors = linecache.getline(file_name, len(for_index)+2)
 	color = for_index[node-1]
 
 
@@ -54,7 +51,7 @@ def cheapest(g, node, repeat, visited):
 	return [min(possibilities)[0], min(possibilities)[1]+1]
 
 
-def greedy(g):
+def greedy(file_name, N):
 	# size = int(x) for x in f.readline().split() #read first line - size
 	# starting_nodes = range(1, size+1) #list (0, ..., size-1)
 	"""cheapest(file_name, node, repeat, visited)
@@ -67,16 +64,14 @@ def greedy(g):
 	return_path = [curr_node]
 	visited = [curr_node]
 
-	# color_list = linecache.getline(file_name, N+2)
-	color_list = g.colors
+	color_list = linecache.getline(file_name, N+2)
 	repeat_colors = 1 #can't be greater than 3
 	curr_color = color_list[curr_node]
 
 	permute = range(1, N+1)
 
 	while collections.Counter(return_path) != collections.Counter(permute):
-		costs = g.matrix_graph[curr_node-1]
-		# costs = convert(file_name, curr_node) #outgoing edge weights for current node
+		costs = convert(file_name, curr_node) #outgoing edge weights for current node
 		if cheapest(file_name, curr_node, 1, visited):
 			(choice_cost, choice) = cheapest(file_name, curr_node, 1, visited)
 			choice_color = color_list[choice-1]
