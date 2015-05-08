@@ -16,7 +16,6 @@ class Graph(object):
                     self.color_of_nodes[x+1] = 'blue'
                 else:
                     self.color_of_nodes[x+1] = 'red'
-
         else:
             for node in range(1, self.quantity_nodes+1):
                 self.color_of_nodes[node] = None
@@ -33,14 +32,11 @@ class Graph(object):
                 neighbors[x] = self.cost_edge(node, x)
         return neighbors
 
-
     def color_of_vertex(self, index_node):
         return self.color_of_nodes[index_node]
 
-
     def cost_edge(self, endpoint1, endpoint2):
         return self.matrix_graph[endpoint1-1][endpoint2-1]
-
 
     def cost_path(self, path):
         #make sure the path is a file with the path listed to use processCase
