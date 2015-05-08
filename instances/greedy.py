@@ -3,6 +3,11 @@ import sys
 import random
 import re
 import collections
+#most
+
+
+
+
 
 #only call this on lines in the matrix. will err otherwise.
 def convert(file_name, node_index):
@@ -12,6 +17,8 @@ def convert(file_name, node_index):
 	line = line.split()
 	line = [int(i) for i in line]
 	return line
+
+
 
 #current issue: if more than one node with same cost, only chooses first one
 def cheapest(file_name, node, repeat, visited):
@@ -23,6 +30,9 @@ def cheapest(file_name, node, repeat, visited):
 
 	colors = linecache.getline(file_name, len(for_index)+2)
 	color = for_index[node-1]
+
+
+
 	if repeat == 3:
 		for i in len(for_index):
 			if (color != colors[i]) and (i+1 not in visited) and (i != node-1):
@@ -92,6 +102,8 @@ def greedy(file_name, N):
 	for i in return_path:
 		print color_list[i-1]
 	return return_path
+			
+# greedy('4x4', 4)
 
 
 
