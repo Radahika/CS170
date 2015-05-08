@@ -2,6 +2,7 @@ from Graph import *
 import sys
 import pdb
 from validator import *
+from greedy import *
 
 fout = open("answer.out", "w")
 
@@ -27,11 +28,11 @@ def path_finder(g):
         elif g.filename == '241.in':
             fout.write("%s\n" % RackCity3)
         elif g.quantity_nodes <= 10:
-            #return brute_force(g)
-            continue
+            assign = brute_force(g)
+            fout.write("%s\n" % " ".join(map(str, assign)))
         else:
-            #return greedy
-            continue
+            assign = greedy(g.pathname, g.quantity_nodes)
+            fout.write("%s\n" % " ".join(map(str, assign)))
 
 def hard_code(g):
     if g == r1:
